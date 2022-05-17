@@ -10,9 +10,13 @@ import { PokemonService } from '../../services/pokemon.service';
 export class PokemonListComponent implements OnInit {
 
   pokemon?: Pokemon;
-  pokemons: any[] = []
+  pokemons: Pokemon[] = [];
+
+  service: PokemonService;
 
   constructor(service: PokemonService) { 
+    this.service = service;
+
     service.getPokemons().subscribe(pokemons => {
       this.pokemons = pokemons;
     })
@@ -26,6 +30,6 @@ export class PokemonListComponent implements OnInit {
   }
 
   onDelete(pokemon: Pokemon) {
-    this.pokemons.splice(this.pokemons.indexOf(pokemon), 1);
+    this.service.deletePokemon(pokemon);
   }
 }

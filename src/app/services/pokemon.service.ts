@@ -4,9 +4,7 @@ import { Pokemon } from '../models/pokemon.model';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, onSnapshot, collection, deleteDoc, addDoc } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, onSnapshot, collection, deleteDoc, addDoc, doc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -35,10 +33,7 @@ export class PokemonService {
           const items: Pokemon[] = [];
 
           snapshot.forEach((doc) => {
-            let pokemon = new Pokemon();
-            pokemon.id = doc.id;
-            pokemon.name = doc.data()["name"]
-            items.push(pokemon)
+            items.push({ id: doc.id, name: doc.data()["name"] })
           })
 
           subscriber.next(items);
@@ -47,7 +42,11 @@ export class PokemonService {
   }
 
   deletePokemon(pokemon: Pokemon) {
+    deleteDoc(doc(db, "pokemons", pokemon.id));
+  }
 
+  addPokemon(pokemon: Pokemon) {
+    addDoc(collection(db, "pokemons"), { "name" : pokemon.name })
   }
 }
 
