@@ -1,3 +1,4 @@
 <ul>
-    <li *ngFor="let pokemon of pokemons">{{pokemon.name}}</li>
-  </ul>
+    <li *ngFor="let pokemon of pokemons" (click)="onClick(pokemon)">{{pokemon.name}}</li>
+</ul>
+<app-pokemon-details [pokemon]="pokemon"></app-pokemon-details>
