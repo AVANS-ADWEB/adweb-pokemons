@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Pokemon } from 'src/app/models/pokemon.model';
 
 @Component({
@@ -11,9 +11,15 @@ export class PokemonDetailsComponent implements OnInit {
   @Input()
   pokemon?: Pokemon;
 
+  @Output()
+  public deleteEvent = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  onDelete() {
+    this.deleteEvent.emit(this.pokemon)
+  }
 }

@@ -21,7 +21,11 @@ export class PokemonListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClick(pokemon: Pokemon) {
+  onSelect(pokemon: Pokemon) {
     this.pokemon = pokemon;
+  }
+
+  onDelete(pokemon: Pokemon) {
+    this.pokemons.splice(this.pokemons.indexOf(pokemon), 1);
   }
 }
