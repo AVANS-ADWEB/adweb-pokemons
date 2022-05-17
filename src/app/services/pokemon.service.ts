@@ -20,9 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class PokemonService {
 
   constructor() { }
@@ -47,6 +45,18 @@ export class PokemonService {
 
   addPokemon(pokemon: Pokemon) {
     addDoc(collection(db, "pokemons"), { "name" : pokemon.name })
+  }
+
+  getPokemon(id: string): Observable<Pokemon> {
+    return new Observable((subscriber: Subscriber<any>) => {
+      onSnapshot(doc(db, "pokemons", id), (doc) => {
+        let data = doc.data();
+
+        if (data) {
+          subscriber.next({ id: doc.id, name: data["name"] });
+        }
+      })
+    });
   }
 }
 

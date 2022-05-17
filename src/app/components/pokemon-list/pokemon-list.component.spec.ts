@@ -1,6 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { PokemonService } from 'src/app/services/pokemon.service';
 
 import { PokemonListComponent } from './pokemon-list.component';
+
+let pokemonService = {
+  getPokemons: () => of([]),
+  deletePokemon: () => void {}
+}
 
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;
@@ -8,7 +15,8 @@ describe('PokemonListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PokemonListComponent ]
+      declarations: [ PokemonListComponent ],
+      providers: [ { provide: PokemonService, useValue: pokemonService } ]
     })
     .compileComponents();
   });
@@ -21,5 +29,13 @@ describe('PokemonListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call deletePokemon', () => {
+    let deletePokemon = spyOn(component.service, "deletePokemon");
+    
+    component.onDelete({id: "", name: ""});
+
+    expect(deletePokemon).toHaveBeenCalled();
   });
 });

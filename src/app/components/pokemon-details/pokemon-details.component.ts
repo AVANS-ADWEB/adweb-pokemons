@@ -1,25 +1,50 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { Pokemon } from 'src/app/models/pokemon.model';
+import { PokemonService } from 'src/app/services/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
   styleUrls: ['./pokemon-details.component.css']
 })
-export class PokemonDetailsComponent implements OnInit {
+export class PokemonDetailsComponent implements OnChanges {
 
-  @Input()
-  pokemon?: Pokemon;
+  //@Input()
+  pokemon?: Observable<Pokemon>;
+
+  service: PokemonService;
+  formBuilder: FormBuilder;
 
   @Output()
   public deleteEvent = new EventEmitter();
 
-  constructor() { }
+  @Input()
+  public key?: string;
+  public pokemonForm?: FormGroup;
 
-  ngOnInit(): void {
+  constructor(service: PokemonService, formBuilder: FormBuilder) {
+    this.service = service;
+    this.formBuilder = formBuilder;
+
   }
 
   onDelete() {
-    this.deleteEvent.emit(this.pokemon)
+    //this.deleteEvent.emit(this.pokemon)
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.key) return;
+
+    this.pokemon = this.service.getPokemon(this.key);
+
+    this.pokemon.subscribe((pokemon) => {
+      this.pokemonForm = this.formBuilder.group(pokemon);
+
+      this.pokemonForm.valueChanges.subscribe(() => {
+        // TODO
+      })
+    })
   }
 }

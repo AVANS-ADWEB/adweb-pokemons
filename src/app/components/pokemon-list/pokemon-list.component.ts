@@ -9,6 +9,8 @@ import { PokemonService } from '../../services/pokemon.service';
 })
 export class PokemonListComponent implements OnInit {
 
+  term: string = "";
+
   pokemon?: Pokemon;
   pokemons: Pokemon[] = [];
 
@@ -31,5 +33,9 @@ export class PokemonListComponent implements OnInit {
 
   onDelete(pokemon: Pokemon) {
     this.service.deletePokemon(pokemon);
+  }
+
+  onSearch(term: string) {
+    this.term = term;
   }
 }

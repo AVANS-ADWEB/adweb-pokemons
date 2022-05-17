@@ -1,5 +1,12 @@
-<div *ngIf="pokemon">
-    <p>{{pokemon.name}}</p>
+<div *ngIf="key && pokemonForm">
+    <h2>Pokemon Detail</h2>
+    <form [formGroup]="pokemonForm">
+        <div class="form-group">
+            <label class="center-block">Name:
+                <input class="form-control" formControlName="name" />
+            </label>
+        </div>
+    </form>
     <button (click)="onDelete()">Delete</button>
 </div>
 
