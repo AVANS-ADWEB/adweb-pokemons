@@ -8,7 +8,7 @@ import { PokemonListComponent } from './components/pokemon-list/pokemon-list.com
 import { PokemonDetailsComponent } from './components/pokemon-details/pokemon-details.component';
 import { PokemonService } from './services/pokemon.service';
 import { PokemonSearchPipe } from './pokemon-search.pipe';
-import { PokemonSearchComponent } from './pokemon-search/pokemon-search.component';
+import { PokemonSearchComponent } from './components/pokemon-search/pokemon-search.component';
 
 @NgModule({
   declarations: [

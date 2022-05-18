@@ -1,13 +1,14 @@
 <div *ngIf="key && pokemonForm">
-    <h2>Pokemon Detail</h2>
+    <h2>Pokemon Details</h2>
     <form [formGroup]="pokemonForm">
         <div class="form-group">
-            <label class="center-block">Name:
-                <input class="form-control" formControlName="name" />
-            </label>
+            Name: <input class="form-control" formControlName="name" />
+        </div>
+        <p></p>
+        <div>
+            <button (click)="onDelete()">Delete</button>
         </div>
     </form>
-    <button (click)="onDelete()">Delete</button>
 </div>
 
 

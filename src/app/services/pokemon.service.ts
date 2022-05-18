@@ -4,7 +4,7 @@ import { Pokemon } from '../models/pokemon.model';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, onSnapshot, collection, deleteDoc, addDoc, doc } from "firebase/firestore";
+import { getFirestore, onSnapshot, collection, doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -39,14 +39,6 @@ export class PokemonService {
     });
   }
 
-  deletePokemon(pokemon: Pokemon) {
-    deleteDoc(doc(db, "pokemons", pokemon.id));
-  }
-
-  addPokemon(pokemon: Pokemon) {
-    addDoc(collection(db, "pokemons"), { "name" : pokemon.name })
-  }
-
   getPokemon(id: string): Observable<Pokemon> {
     return new Observable((subscriber: Subscriber<any>) => {
       onSnapshot(doc(db, "pokemons", id), (doc) => {
@@ -57,6 +49,18 @@ export class PokemonService {
         }
       })
     });
+  }
+
+  addPokemon(pokemon: Pokemon) {
+    addDoc(collection(db, "pokemons"), { "name" : pokemon.name })
+  }
+
+  updatePokemon(pokemon: Pokemon) {
+    updateDoc(doc(db, "pokemons", pokemon.id), { "name" : pokemon.name })
+  }
+
+  deletePokemon(pokemon: Pokemon) {
+    deleteDoc(doc(db, "pokemons", pokemon.id));
   }
 }
 

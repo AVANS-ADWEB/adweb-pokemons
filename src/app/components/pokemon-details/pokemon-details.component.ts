@@ -11,7 +11,6 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 })
 export class PokemonDetailsComponent implements OnChanges {
 
-  //@Input()
   pokemon?: Observable<Pokemon>;
 
   service: PokemonService;
@@ -21,7 +20,7 @@ export class PokemonDetailsComponent implements OnChanges {
   public deleteEvent = new EventEmitter();
 
   @Input()
-  public key?: string;
+  public key: any;
   public pokemonForm?: FormGroup;
 
   constructor(service: PokemonService, formBuilder: FormBuilder) {
@@ -31,7 +30,10 @@ export class PokemonDetailsComponent implements OnChanges {
   }
 
   onDelete() {
-    //this.deleteEvent.emit(this.pokemon)
+    this.key = null;
+    this.pokemon?.subscribe((pokemon) => {
+      this.deleteEvent.emit(pokemon)
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -42,8 +44,8 @@ export class PokemonDetailsComponent implements OnChanges {
     this.pokemon.subscribe((pokemon) => {
       this.pokemonForm = this.formBuilder.group(pokemon);
 
-      this.pokemonForm.valueChanges.subscribe(() => {
-        // TODO
+      this.pokemonForm.valueChanges.subscribe((pokemon) => {
+        this.service.updatePokemon(pokemon);
       })
     })
   }
