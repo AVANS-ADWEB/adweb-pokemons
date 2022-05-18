@@ -12,6 +12,7 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 export class PokemonDetailsComponent implements OnChanges {
 
   pokemon?: Observable<Pokemon>;
+  owner?: Observable<string>;
 
   service: PokemonService;
   formBuilder: FormBuilder;
@@ -40,6 +41,7 @@ export class PokemonDetailsComponent implements OnChanges {
     if (!this.key) return;
 
     this.pokemon = this.service.getPokemon(this.key);
+    this.owner = this.service.getPokemonOwner(this.key);
 
     this.pokemon.subscribe((pokemon) => {
       this.pokemonForm = this.formBuilder.group(pokemon);

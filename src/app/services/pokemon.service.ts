@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subscriber } from 'rxjs';
+import { mergeMap, Observable, of, Subscriber } from 'rxjs';
 import { Pokemon } from '../models/pokemon.model';
 
 // Import the functions you need from the SDKs you need
@@ -31,7 +31,7 @@ export class PokemonService {
           const items: Pokemon[] = [];
 
           snapshot.forEach((doc) => {
-            items.push({ id: doc.id, name: doc.data()["name"] })
+            items.push({ id: doc.id, name: doc.data()["name"], owner: doc.data()["owner"] })
           })
 
           subscriber.next(items);
@@ -45,10 +45,28 @@ export class PokemonService {
         let data = doc.data();
 
         if (data) {
-          subscriber.next({ id: doc.id, name: data["name"] });
+          subscriber.next({ id: doc.id, name: data["name"], owner: data["owner"] });
         }
       })
     });
+  }
+
+  getOwner(id: string): Observable<string> {
+    return new Observable((subscriber: Subscriber<any>) => {
+      onSnapshot(doc(db, "owners", id), (doc) => {
+        let data = doc.data();
+
+        if (data) {
+          subscriber.next(data["name"]);
+        }
+      })
+    });
+  }
+
+  getPokemonOwner(id: string): Observable<string> {
+    return this.getPokemon(id).pipe(mergeMap((pokemon) => {
+      return this.getOwner(pokemon.owner);
+    }));
   }
 
   addPokemon(pokemon: Pokemon) {

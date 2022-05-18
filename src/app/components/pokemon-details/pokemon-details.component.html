@@ -3,6 +3,8 @@
     <form [formGroup]="pokemonForm">
         <div class="form-group">
             Name: <input class="form-control" formControlName="name" />
+            <p></p>
+            Owner: {{owner | async}}
         </div>
         <p></p>
         <div>
