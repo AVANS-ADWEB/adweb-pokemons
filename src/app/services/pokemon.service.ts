@@ -57,6 +57,7 @@ export class PokemonService {
         let data = doc.data();
 
         if (data) {
+          console.log(data["name"]);
           subscriber.next(data["name"]);
         }
       })
@@ -64,6 +65,16 @@ export class PokemonService {
   }
 
   getPokemonOwner(id: string): Observable<string> {
+    return new Observable((subscriber: Subscriber<any>) => {
+      this.getPokemon(id).subscribe((pokemon) => {
+        this.getOwner(pokemon.owner).subscribe((owner) => {
+          subscriber.next(owner);
+        })
+      })
+    });
+  }
+
+  getPokemonOwnerGood(id: string): Observable<string> {
     return this.getPokemon(id).pipe(mergeMap((pokemon) => {
       return this.getOwner(pokemon.owner);
     }));
