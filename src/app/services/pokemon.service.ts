@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { mergeMap, Observable, of, Subscriber } from 'rxjs';
+import { combineLatest, mergeMap, Observable, Subscriber } from 'rxjs';
 import { Pokemon } from '../models/pokemon.model';
 
 // Import the functions you need from the SDKs you need
@@ -31,7 +31,7 @@ export class PokemonService {
           const items: Pokemon[] = [];
 
           snapshot.forEach((doc) => {
-            items.push({ id: doc.id, name: doc.data()["name"], owner: doc.data()["owner"] })
+            items.push({ id: doc.id, name: doc.data()["name"], owner: doc.data()["owner"], friends: doc.data()["friends"] })
           })
 
           subscriber.next(items);
@@ -45,7 +45,7 @@ export class PokemonService {
         let data = doc.data();
 
         if (data) {
-          subscriber.next({ id: doc.id, name: data["name"], owner: data["owner"] });
+          subscriber.next({ id: doc.id, name: data["name"], owner: data["owner"], friends: data["friends"] });
         }
       })
     });
@@ -57,7 +57,6 @@ export class PokemonService {
         let data = doc.data();
 
         if (data) {
-          console.log(data["name"]);
           subscriber.next(data["name"]);
         }
       })
@@ -77,6 +76,20 @@ export class PokemonService {
   getPokemonOwnerGood(id: string): Observable<string> {
     return this.getPokemon(id).pipe(mergeMap((pokemon) => {
       return this.getOwner(pokemon.owner);
+    }));
+  }
+
+  getPokemonFriends(id: string): Observable<Pokemon[]> {
+    return this.getPokemon(id).pipe(mergeMap((pokemon) => {
+      let friends: Observable<Pokemon>[] = [];
+
+      if (pokemon.friends) {
+        pokemon.friends.forEach((friend) => {
+          friends.push(this.getPokemon(friend));
+        });
+      }
+
+      return combineLatest(friends);
     }));
   }
 

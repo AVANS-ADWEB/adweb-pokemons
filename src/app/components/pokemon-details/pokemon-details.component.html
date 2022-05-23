@@ -1,16 +1,16 @@
-<div *ngIf="key && pokemonForm">
+<div *ngIf="pokemon">
     <h2>Pokemon Details</h2>
-    <form [formGroup]="pokemonForm">
-        <div class="form-group">
-            Name: <input class="form-control" formControlName="name" />
-            <p></p>
-            Owner: {{owner | async}}
-        </div>
-        <p></p>
-        <div>
-            <button (click)="onDelete()">Delete</button>
-        </div>
-    </form>
+    <p></p>
+    {{pokemon.name}}
+    <p></p>
+    {{owner}}
+    <p></p>
+    <h3>Friends</h3>
+    <ul *ngIf="pokemon.friends">
+        <li *ngFor="let friend of friends">{{friend.name}}</li>
+    </ul>
+    <p></p>
+    <button (click)="onDelete()">Delete</button>
 </div>
 
 

@@ -1,6 +1,4 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { Pokemon } from 'src/app/models/pokemon.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
 
@@ -11,44 +9,38 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 })
 export class PokemonDetailsComponent implements OnChanges {
 
-  pokemon?: Observable<Pokemon>;
-  owner?: Observable<string>;
-
   service: PokemonService;
-  formBuilder: FormBuilder;
+
+  pokemon?: Pokemon;
+  owner?: string;
+  friends?: Pokemon[];
 
   @Output()
   public deleteEvent = new EventEmitter();
 
   @Input()
   public key: any;
-  public pokemonForm?: FormGroup;
 
-  constructor(service: PokemonService, formBuilder: FormBuilder) {
+  constructor(service: PokemonService) {
     this.service = service;
-    this.formBuilder = formBuilder;
+  }
 
+  ngOnChanges(): void {
+    this.service.getPokemon(this.key).subscribe((pokemon) => {
+      this.pokemon = pokemon;
+    })
+
+    this.service.getPokemonOwner(this.key).subscribe((owner) => {
+      this.owner = owner;
+    })
+
+    this.service.getPokemonFriends(this.key).subscribe((friends) => {
+      this.friends = friends;
+    })
   }
 
   onDelete() {
+    this.deleteEvent.emit(this.pokemon);
     this.key = null;
-    this.pokemon?.subscribe((pokemon) => {
-      this.deleteEvent.emit(pokemon)
-    })
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!this.key) return;
-
-    this.pokemon = this.service.getPokemon(this.key);
-    this.owner = this.service.getPokemonOwner(this.key);
-
-    this.pokemon.subscribe((pokemon) => {
-      this.pokemonForm = this.formBuilder.group(pokemon);
-
-      this.pokemonForm.valueChanges.subscribe((pokemon) => {
-        this.service.updatePokemon(pokemon);
-      })
-    })
   }
 }
