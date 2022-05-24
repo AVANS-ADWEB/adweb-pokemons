@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Move } from 'src/app/models/move.model';
 import { Pokemon } from 'src/app/models/pokemon.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
 
@@ -13,6 +14,7 @@ export class PokemonDetailsComponent implements OnChanges {
 
   pokemon?: Pokemon;
   owner?: string;
+  moves?: Move[];
   friends?: Pokemon[];
 
   @Output()
@@ -33,6 +35,14 @@ export class PokemonDetailsComponent implements OnChanges {
     this.service.getPokemonOwner(this.key).subscribe((owner) => {
       this.owner = owner;
     })
+
+    this.moves = undefined;
+
+    this.service.getPokemonMoves(this.key).subscribe((moves) => {
+      this.moves = moves;
+    })
+
+    this.friends = undefined;
 
     this.service.getPokemonFriends(this.key).subscribe((friends) => {
       this.friends = friends;

@@ -1,12 +1,16 @@
 <div *ngIf="pokemon">
     <h2>Pokemon Details</h2>
     <p></p>
-    {{pokemon.name}}
+    Name: {{pokemon.name}}
     <p></p>
-    {{owner}}
+    Owner: {{owner}}
     <p></p>
+    <h3>Moves</h3>
+    <ul *ngIf="moves">
+        <li *ngFor="let move of moves">{{move.move}} {{move.power}}</li>
+    </ul>
     <h3>Friends</h3>
-    <ul *ngIf="pokemon.friends">
+    <ul *ngIf="friends">
         <li *ngFor="let friend of friends">{{friend.name}}</li>
     </ul>
     <p></p>

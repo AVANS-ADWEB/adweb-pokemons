@@ -5,6 +5,7 @@ import { Pokemon } from '../models/pokemon.model';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, onSnapshot, collection, doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { Move } from '../models/move.model';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -76,6 +77,22 @@ export class PokemonService {
   getPokemonOwnerGood(id: string): Observable<string> {
     return this.getPokemon(id).pipe(mergeMap((pokemon) => {
       return this.getOwner(pokemon.owner);
+    }));
+  }
+
+  getPokemonMoves(id: string): Observable<Move[]> {
+    return this.getPokemon(id).pipe(mergeMap((pokemon) => {
+      return new Observable((subscriber: Subscriber<any>) => {
+        onSnapshot(collection(db, "pokemons", pokemon.id, "moves"), (snapshot) => {
+          const items: Move[] = [];
+
+          snapshot.forEach((doc) => {
+            items.push({ id: doc.id, move: doc.data()["move"], power: doc.data()["power"] })
+          })
+
+          subscriber.next(items);
+        });
+      });
     }));
   }
 
