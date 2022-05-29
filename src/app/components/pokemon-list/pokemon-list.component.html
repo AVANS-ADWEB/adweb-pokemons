@@ -1,5 +1,5 @@
 <app-pokemon-search (search)="onSearch($event)"></app-pokemon-search>
-<ul>
+<ul [dragula]="'POKEMONS'">
     <li *ngFor="let pokemon of pokemons | pokemonSearch:term " (click)="onSelect(pokemon)">{{pokemon.name}}</li>
 </ul>
 <app-pokemon-details *ngIf="pokemon" [key]="pokemon.id" (deleteEvent)="onDelete($event)"></app-pokemon-details>

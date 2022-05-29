@@ -10,6 +10,8 @@ import { PokemonService } from './services/pokemon.service';
 import { PokemonSearchPipe } from './pokemon-search.pipe';
 import { PokemonSearchComponent } from './components/pokemon-search/pokemon-search.component';
 
+import { DragulaModule, DragulaService } from 'ng2-dragula';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,9 +24,10 @@ import { PokemonSearchComponent } from './components/pokemon-search/pokemon-sear
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DragulaModule
   ],
-  providers: [ PokemonService ],
+  providers: [ PokemonService, DragulaService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
