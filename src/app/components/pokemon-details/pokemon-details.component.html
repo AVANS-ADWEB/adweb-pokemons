@@ -7,7 +7,7 @@
     <p></p>
     <h3>Moves</h3>
     <ul *ngIf="moves">
-        <li *ngFor="let move of moves">{{move.move}} {{move.power}}</li>
+        <li *ngFor="let move of moves">{{move.move}} ({{move.power}})</li>
     </ul>
     <h3>Friends</h3>
     <ul *ngIf="friends">
