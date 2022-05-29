@@ -81,19 +81,17 @@ export class PokemonService {
   }
 
   getPokemonMoves(id: string): Observable<Move[]> {
-    return this.getPokemon(id).pipe(mergeMap((pokemon) => {
-      return new Observable((subscriber: Subscriber<any>) => {
-        onSnapshot(collection(db, "pokemons", pokemon.id, "moves"), (snapshot) => {
-          const items: Move[] = [];
+    return new Observable((subscriber: Subscriber<any>) => {
+      onSnapshot(collection(db, "pokemons", id, "moves"), (snapshot) => {
+        const items: Move[] = [];
 
-          snapshot.forEach((doc) => {
-            items.push({ id: doc.id, move: doc.data()["move"], power: doc.data()["power"] })
-          })
+        snapshot.forEach((doc) => {
+          items.push({ id: doc.id, move: doc.data()["move"], power: doc.data()["power"] })
+        })
 
-          subscriber.next(items);
-        });
+        subscriber.next(items);
       });
-    }));
+    });
   }
 
   getPokemonFriends(id: string): Observable<Pokemon[]> {
