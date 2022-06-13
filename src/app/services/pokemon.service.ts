@@ -4,7 +4,7 @@ import { Pokemon } from '../models/pokemon.model';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, onSnapshot, collection, doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { getFirestore, onSnapshot, collection, doc, addDoc, updateDoc, deleteDoc, orderBy, query, limit, where } from "firebase/firestore";
 import { Move } from '../models/move.model';
 
 // Your web app's Firebase configuration
@@ -28,7 +28,8 @@ export class PokemonService {
 
   getPokemons(): Observable<Pokemon[]> {
     return new Observable((subscriber: Subscriber<any>) => {
-        onSnapshot(collection(db, "pokemons"), (snapshot) => {
+        let q = query(collection(db, "pokemons"), where("name", ">", "Bulbasaur"), orderBy("name", "desc"), limit(10));
+        onSnapshot(q, (snapshot) => {
           const items: Pokemon[] = [];
 
           snapshot.forEach((doc) => {
