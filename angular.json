@@ -102,5 +102,7 @@
       }
     }
   },
-  "defaultProject": "adweb-pokemons"
+  "cli": {
+    "analytics": false
+  }
 }
